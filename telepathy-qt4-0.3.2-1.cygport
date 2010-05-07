@@ -1,10 +1,14 @@
 inherit qt4
 
 DESCRIPTION="Telepathy connection manager library"
-HOMEPAGE="http://telepathy.freedesktop.org/wiki/"
+HOMEPAGE="http://telepathy.freedesktop.org/wiki/Telepathy-Qt4"
 SRC_URI="http://telepathy.freedesktop.org/releases/${PN}/${P}.tar.gz"
 
-PATCH_URI="0.2.1-no-undefined.patch"
+PATCH_URI="
+	0.2.1-no-undefined.patch
+	0.3.2-gcc4-visibility.patch
+	0.3.2-tests-build.patch
+"
 
 PKG_NAMES="${PN} lib${PN}_0 lib${PN}-devel lib${PN}-farsight0 lib${PN}-farsight-devel"
 libtelepathy_qt4_0_CONTENTS="usr/bin/cygtelepathy-qt4-0.dll usr/share/doc/"

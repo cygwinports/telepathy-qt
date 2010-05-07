@@ -4,7 +4,7 @@
  # that vim quickfix mode (:make) doesn't interpret the libtool --mode=link
  # command as an error message in a bizarrely named file
  libtelepathy_qt4_farsight_la_LDFLAGS = \
-+	-no-undefined \
++    -no-undefined \
      -version-info "$(LT_CURRENT)":"$(LT_REVISION)":"$(LT_AGE)"
  libtelepathy_qt4_farsight_la_LIBADD = \
  	$(QTCORE_LIBS) \
@@ -14,18 +14,7 @@
  # that vim quickfix mode (:make) doesn't interpret the libtool --mode=link
  # command as an error message in a bizarrely named file
  libtelepathy_qt4_la_LDFLAGS = \
-+	-no-undefined \
++    -no-undefined \
      -version-info "$(LT_CURRENT)":"$(LT_REVISION)":"$(LT_AGE)"
  libtelepathy_qt4_la_LIBADD = $(ALL_LIBS)
  libtelepathy_qt4_la_DEPENDENCIES = Makefile.am
---- origsrc/telepathy-qt4-0.2.1/tests/lib/Makefile.am	2009-12-03 10:27:07.000000000 -0600
-+++ src/telepathy-qt4-0.2.1/tests/lib/Makefile.am	2010-01-25 23:47:09.169852500 -0600
-@@ -24,7 +24,7 @@ CLEANFILES = $(BUILT_SOURCES)
- libtp_qt4_tests_la_SOURCES = \
-     test.cpp \
-     test.h
--libtp_qt4_tests_la_LIBADD = $(top_builddir)/TelepathyQt4/libtelepathy-qt4.la
-+libtp_qt4_tests_la_LIBADD = $(top_builddir)/TelepathyQt4/libtelepathy-qt4.la $(QTTEST_LIBS)
- 
- if ENABLE_TP_GLIB_TESTS
- 

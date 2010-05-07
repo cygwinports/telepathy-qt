@@ -1,0 +1,13 @@
+--- origsrc/telepathy-qt4-0.3.2/m4/tp-visibility-hidden.m4	2010-03-16 00:41:06.000000000 -0500
++++ src/telepathy-qt4-0.3.2/m4/tp-visibility-hidden.m4	2010-05-04 23:09:17.518162900 -0500
+@@ -37,8 +37,8 @@ tp_old_cflags="$CFLAGS"
+ tp_old_cxxflags="$CXXFLAGS"
+ for tp_try_arg in "-fvisibility=hidden"; do
+ 	LDFLAGS="$tp_old_ldflags $tp_try_arg"
+-	CFLAGS="$tp_old_cflags $tp_try_arg"
+-	CXXFLAGS="$tp_old_cxxflags $tp_try_arg"
++	CFLAGS="$tp_old_cflags -Werror $tp_try_arg"
++	CXXFLAGS="$tp_old_cxxflags -Werror $tp_try_arg"
+ 	AC_TRY_LINK([], [], [
+ 		AC_MSG_RESULT([$tp_try_arg])
+ 		AC_SUBST([VISIBILITY_HIDDEN_FLAGS], [$tp_try_arg])
