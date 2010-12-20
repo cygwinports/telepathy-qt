@@ -1,16 +1,15 @@
-inherit qt4
+inherit qt4-cmake
 
 DESCRIPTION="Telepathy connection manager library"
 HOMEPAGE="http://telepathy.freedesktop.org/wiki/Telepathy-Qt4"
 SRC_URI="http://telepathy.freedesktop.org/releases/${PN}/${P}.tar.gz"
 
 PATCH_URI="
-	0.2.1-no-undefined.patch
-	0.3.2-gcc4-visibility.patch
-	0.3.2-tests-build.patch
+	0.4.1-no-undefined.patch
+	0.4.1-install.patch
 "
 
-PKG_NAMES="${PN} lib${PN}_0 lib${PN}-devel lib${PN}-farsight0 lib${PN}-farsight-devel"
+PKG_NAMES="lib${PN}_0 lib${PN}-devel lib${PN}-farsight0 lib${PN}-farsight-devel"
 libtelepathy_qt4_0_CONTENTS="usr/bin/cygtelepathy-qt4-0.dll usr/share/doc/"
 libtelepathy_qt4_devel_CONTENTS='--exclude=*arsight* usr/include/ usr/lib/'
 libtelepathy_qt4_farsight0_CONTENTS="usr/bin/cygtelepathy-qt4-farsight-0.dll"
@@ -18,6 +17,4 @@ libtelepathy_qt4_farsight_devel_CONTENTS="usr/include/telepathy-1.0/TelepathyQt4
                                           usr/lib/libtelepathy-qt4-farsight.*
                                           usr/lib/pkgconfig/TelepathyQt4Farsight.pc"
 
-DIFF_EXCLUDES="doxygen.cfg"
-
-CYGCONF_ARGS="--disable-static"
+CYGCMAKE_ARGS="-DCXX_FVISIBILITY_HIDDEN=NO -DHAVE_QDBUSVARIANT_OPERATOR_EQUAL=YES"

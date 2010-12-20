@@ -1,0 +1,20 @@
+--- origsrc/telepathy-qt4-0.4.1/TelepathyQt4/CMakeLists.txt	2010-12-08 10:20:44.000000000 -0600
++++ src/telepathy-qt4-0.4.1/TelepathyQt4/CMakeLists.txt	2010-12-19 21:46:08.768127000 -0600
+@@ -532,6 +533,7 @@ if (WIN32)
+                                   ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT headers)
+ else (WIN32)
+     install(TARGETS telepathy-qt4 LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT mainlibrary
++                                  RUNTIME DESTINATION bin COMPONENT mainlibrary
+                                   ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT headers)
+ endif (WIN32)
+ 
+--- origsrc/telepathy-qt4-0.4.1/TelepathyQt4/Farsight/CMakeLists.txt	2010-12-08 10:20:44.000000000 -0600
++++ src/telepathy-qt4-0.4.1/TelepathyQt4/Farsight/CMakeLists.txt	2010-12-19 21:46:46.460194300 -0600
+@@ -43,6 +44,7 @@ if(FARSIGHT_COMPONENTS_FOUND)
+                                                ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT farsight_headers)
+     else (WIN32)
+         install(TARGETS telepathy-qt4-farsight LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT farsight
++                                               RUNTIME DESTINATION bin COMPONENT farsight
+                                                ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT farsight_headers)
+     endif (WIN32)
+ 

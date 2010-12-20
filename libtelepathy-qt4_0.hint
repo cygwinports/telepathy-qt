@@ -1,5 +1,5 @@
 category: KDE Net
-requires: libgcc1 libQtCore4 libQtDBus4 libQtNetwork4 libstdc++6
+requires: libgcc1 libQtCore4 libQtDBus4 libQtNetwork4 libQtXml4 libstdc++6
 external-source: telepathy-qt4
 sdesc: "Qt4 Telepathy client library (runtime)"
 ldesc: "Telepathy is a D-Bus framework for unifying real time 
