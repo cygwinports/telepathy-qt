@@ -1,5 +1,5 @@
 category: KDE Net
-requires: libtelepathy-qt4-farsight0 libQtCore4-devel libtelepathy-farsight-devel libtelepathy-qt4-devel
+requires: libtelepathy-qt4-farsight1 libQtCore4-devel libtelepathy-farsight-devel libtelepathy-qt4-devel
 external-source: telepathy-qt4
 sdesc: "Qt4 Telepathy Farsight client library (development)"
 ldesc: "Telepathy is a D-Bus framework for unifying real time 

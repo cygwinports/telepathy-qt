@@ -5,14 +5,14 @@ HOMEPAGE="http://telepathy.freedesktop.org/wiki/Telepathy-Qt4"
 SRC_URI="http://telepathy.freedesktop.org/releases/${PN}/${P}.tar.gz"
 
 PATCH_URI="
-	0.4.1-no-undefined.patch
 	0.4.1-install.patch
+	0.6.1-no-undefined.patch
 "
 
-PKG_NAMES="lib${PN}_0 lib${PN}-devel lib${PN}-farsight0 lib${PN}-farsight-devel"
-libtelepathy_qt4_0_CONTENTS="usr/bin/cygtelepathy-qt4-0.dll usr/share/doc/"
+PKG_NAMES="lib${PN}_1 lib${PN}-devel lib${PN}-farsight1 lib${PN}-farsight-devel"
+libtelepathy_qt4_1_CONTENTS="usr/bin/cygtelepathy-qt4-1.dll usr/share/doc/"
 libtelepathy_qt4_devel_CONTENTS='--exclude=*arsight* usr/include/ usr/lib/'
-libtelepathy_qt4_farsight0_CONTENTS="usr/bin/cygtelepathy-qt4-farsight-0.dll"
+libtelepathy_qt4_farsight1_CONTENTS="usr/bin/cygtelepathy-qt4-farsight-1.dll"
 libtelepathy_qt4_farsight_devel_CONTENTS="usr/include/telepathy-1.0/TelepathyQt4/Farsight/
                                           usr/lib/libtelepathy-qt4-farsight.*
                                           usr/lib/pkgconfig/TelepathyQt4Farsight.pc"

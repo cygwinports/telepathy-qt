@@ -1,0 +1,137 @@
+--- origsrc/telepathy-qt4-0.6.1/CMakeLists.txt	2011-06-01 10:12:54.000000000 -0500
++++ src/telepathy-qt4-0.6.1/CMakeLists.txt	2011-07-12 22:04:23.095435900 -0500
+@@ -150,6 +150,7 @@ macro_log_feature(HAVE_TEST_PYTHON "dbus
+ # Those are needed for the insane include dir dependency hell
+ find_package(GLIB2)
+ find_package(GObject)
++find_package(GIO)
+ find_package(DBus)
+ find_package(DBusGLib)
+ find_package(LibXml2)
+--- origsrc/telepathy-qt4-0.6.1/TelepathyQt4/Farsight/CMakeLists.txt	2011-07-12 20:15:28.807460800 -0500
++++ src/telepathy-qt4-0.6.1/TelepathyQt4/Farsight/CMakeLists.txt	2011-07-12 21:45:29.710636500 -0500
+@@ -29,7 +29,9 @@ if(FARSIGHT_COMPONENTS_FOUND)
+         ${QT_QTDBUS_LIBRARY}
+         ${QT_QTCORE_LIBRARY}
+         ${TELEPATHY_FARSIGHT_LIBRARIES}
++        ${TELEPATHY_GLIB_LIBRARIES}
+         ${GSTREAMER_INTERFACE_LIBRARY}
++        ${GOBJECT_LIBRARIES}
+         telepathy-qt4)
+ 
+     # Set the correct version number
+--- origsrc/telepathy-qt4-0.6.1/cmake/modules/FindGIO.cmake	1969-12-31 18:00:00.000000000 -0600
++++ src/telepathy-qt4-0.6.1/cmake/modules/FindGIO.cmake	2011-07-12 22:03:05.652989400 -0500
+@@ -0,0 +1,79 @@
++# - Try to find GIO
++# Once done this will define
++#
++#  GIO_FOUND - system has GIO
++#  GIO_INCLUDE_DIR - the GIO include directory
++#  GIO_LIBRARIES - the libraries needed to use GIO
++#  GIO_DEFINITIONS - Compiler switches required for using GIO
++
++# Copyright (c) 2008 Helio Chissini de Castro, <helio@kde.org>
++#  (c)2006, Tim Beaulen <tbscope@gmail.com>
++
++
++IF (GIO_INCLUDE_DIR AND GIO_LIBRARIES)
++   # in cache already
++   SET(GIO_FIND_QUIETLY TRUE)
++ELSE (GIO_INCLUDE_DIR AND GIO_LIBRARIES)
++   SET(GIO_FIND_QUIETLY FALSE)
++ENDIF (GIO_INCLUDE_DIR AND GIO_LIBRARIES)
++
++IF (NOT WIN32)
++   FIND_PACKAGE(PkgConfig REQUIRED)
++   # use pkg-config to get the directories and then use these values
++   # in the FIND_PATH() and FIND_LIBRARY() calls
++   PKG_CHECK_MODULES(PKG_GIO2 REQUIRED gio-2.0)
++   SET(GIO_DEFINITIONS ${PKG_GIO2_CFLAGS})
++ENDIF (NOT WIN32)
++
++FIND_PATH(GIO_INCLUDE_DIR gio/gio.h
++   PATHS
++   ${PKG_GIO2_INCLUDE_DIRS}
++   /usr/include/glib-2.0/
++   PATH_SUFFIXES glib-2.0
++   )
++
++FIND_LIBRARY(_GIOLibs NAMES gio-2.0
++   PATHS
++   ${PKG_GIO2_LIBRARY_DIRS}
++   )
++FIND_LIBRARY(_GObjectLibs NAMES gobject-2.0
++   PATHS
++   ${PKG_GIO2_LIBRARY_DIRS}
++   )
++FIND_LIBRARY(_GModuleLibs NAMES gmodule-2.0
++   PATHS
++   ${PKG_GIO2_LIBRARY_DIRS}
++   )
++FIND_LIBRARY(_GThreadLibs NAMES gthread-2.0
++   PATHS
++   ${PKG_GIO2_LIBRARY_DIRS}
++   )
++FIND_LIBRARY(_GLibs NAMES glib-2.0
++   PATHS
++   ${PKG_GIO2_LIBRARY_DIRS}
++   )
++
++IF (WIN32)
++SET (GIO_LIBRARIES ${_GIOLibs} ${_GModuleLibs} ${_GThreadLibs} ${_GLibs})
++ELSE (WIN32)
++SET (GIO_LIBRARIES ${PKG_GIO2_LIBRARIES})
++ENDIF (WIN32)
++
++IF (GIO_INCLUDE_DIR AND GIO_LIBRARIES)
++   SET(GIO_FOUND TRUE)
++ELSE (GIO_INCLUDE_DIR AND GIO_LIBRARIES)
++   SET(GIO_FOUND FALSE)
++ENDIF (GIO_INCLUDE_DIR AND GIO_LIBRARIES)
++
++IF (GIO_FOUND)
++   IF (NOT GIO_FIND_QUIETLY)
++      MESSAGE(STATUS "Found GIO libraries: ${GIO_LIBRARIES}")
++      MESSAGE(STATUS "Found GIO includes : ${GIO_INCLUDE_DIR}")
++   ENDIF (NOT GIO_FIND_QUIETLY)
++ELSE (GIO_FOUND)
++    IF (GIO_FIND_REQUIRED)
++      MESSAGE(STATUS "Could NOT find GIO")
++    ENDIF(GIO_FIND_REQUIRED)
++ENDIF (GIO_FOUND)
++
++MARK_AS_ADVANCED(GIO_INCLUDE_DIR GIO_LIBRARIES)
+--- origsrc/telepathy-qt4-0.6.1/tests/lib/glib/CMakeLists.txt	2011-06-01 10:12:54.000000000 -0500
++++ src/telepathy-qt4-0.6.1/tests/lib/glib/CMakeLists.txt	2011-07-13 00:45:05.607486600 -0500
+@@ -3,6 +3,7 @@ include_directories(
+     ${TELEPATHY_GLIB_INCLUDE_DIR}
+     ${GLIB2_INCLUDE_DIR}
+     ${GOBJECT_INCLUDE_DIR}
++    ${GIO_INCLUDE_DIR}
+     ${DBUS_INCLUDE_DIR})
+ 
+ if(ENABLE_TP_GLIB_TESTS)
+@@ -46,16 +47,17 @@ if(ENABLE_TP_GLIB_TESTS)
+         util.h)
+     add_library(tp-glib-tests SHARED ${tp_glib_tests_SRCS})
+     target_link_libraries(tp-glib-tests
+-        ${TELEPATHY_GLIB_LIBRARIES}
+-        ${GOBJECT_LIBRARIES}
+-        ${GLIB2_LIBRARIES}
+-        ${DBUS_GLIB_LIBRARIES}
+         example-cm-callable
+         example-cm-contactlist
+         example-cm-csh
+         example-cm-echo
+         example-cm-echo2
+         tp-glib-tests-future-extensions
+-        future-example-cm-conference)
++        future-example-cm-conference
++        ${TELEPATHY_GLIB_LIBRARIES}
++        ${GIO_LIBRARIES}
++        ${GOBJECT_LIBRARIES}
++        ${GLIB2_LIBRARIES}
++        ${DBUS_GLIB_LIBRARIES})
+ 
+ endif(ENABLE_TP_GLIB_TESTS)
