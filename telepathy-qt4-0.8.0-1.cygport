@@ -6,7 +6,7 @@ SRC_URI="http://telepathy.freedesktop.org/releases/${PN}/${P}.tar.gz"
 
 PATCH_URI="
 	0.4.1-install.patch
-	0.6.1-no-undefined.patch
+	0.8.0-no-undefined.patch
 "
 
 PKG_NAMES="lib${PN}_1 lib${PN}-devel lib${PN}-farsight1 lib${PN}-farsight-devel"
