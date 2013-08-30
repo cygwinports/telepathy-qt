@@ -1,0 +1,38 @@
+--- origsrc/telepathy-qt-0.9.3/TelepathyQt/CMakeLists.txt	2012-07-13 12:40:23.000000000 -0500
++++ src/telepathy-qt-0.9.3/TelepathyQt/CMakeLists.txt	2013-08-30 00:23:29.252343300 -0500
+@@ -804,6 +804,7 @@ else (WIN32)
+     install(TARGETS telepathy-qt${QT_VERSION_MAJOR}
+             EXPORT  TelepathyQt${QT_VERSION_MAJOR}Targets
+             LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT mainlibrary
++            RUNTIME DESTINATION bin COMPONENT mainlibrary
+             ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT libs)
+ endif (WIN32)
+ 
+@@ -970,6 +971,7 @@ if(ENABLE_EXPERIMENTAL_SERVICE_SUPPORT)
+         install(TARGETS telepathy-qt${QT_VERSION_MAJOR}-service
+                 EXPORT  TelepathyQt${QT_VERSION_MAJOR}Targets
+                 LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT service
++                RUNTIME DESTINATION bin COMPONENT service
+                 ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT service_libs)
+     endif (WIN32)
+ 
+--- origsrc/telepathy-qt-0.9.3/TelepathyQt/Farsight/CMakeLists.txt	2012-07-13 12:40:23.000000000 -0500
++++ src/telepathy-qt-0.9.3/TelepathyQt/Farsight/CMakeLists.txt	2013-08-30 00:23:57.481957900 -0500
+@@ -48,6 +48,7 @@ if(FARSIGHT_COMPONENTS_FOUND)
+         install(TARGETS telepathy-qt${QT_VERSION_MAJOR}-farsight
+                 EXPORT  TelepathyQt${QT_VERSION_MAJOR}Targets
+                 LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT farsight
++                RUNTIME DESTINATION bin COMPONENT farsight
+                 ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT farsight_libs)
+     endif (WIN32)
+ 
+--- origsrc/telepathy-qt-0.9.3/TelepathyQt/Farstream/CMakeLists.txt	2012-07-13 12:40:23.000000000 -0500
++++ src/telepathy-qt-0.9.3/TelepathyQt/Farstream/CMakeLists.txt	2013-08-30 00:24:17.785119200 -0500
+@@ -65,6 +65,7 @@ if(FARSTREAM_COMPONENTS_FOUND)
+         install(TARGETS telepathy-qt${QT_VERSION_MAJOR}-farstream
+                 EXPORT TelepathyQt${QT_VERSION_MAJOR}Targets
+                 LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT farstream
++                RUNTIME DESTINATION bin COMPONENT farstream
+                 ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT farstream_libs)
+     endif (WIN32)
+ 
