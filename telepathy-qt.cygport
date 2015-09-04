@@ -1,10 +1,10 @@
 inherit qt4-cmake
 
-NAME="telepathy-qt4"
+NAME="telepathy-qt"
 VERSION=0.9.3
 RELEASE=1
 CATEGORY="Libs"
-SUMMARY="Qt4 Telepathy client library"
+SUMMARY="Qt Telepathy client library"
 DESCRIPTION="Telepathy is a D-Bus framework for unifying real time
 communication, including instant messaging, voice calls and video calls. It
 abstracts differences between protocols to provide a unified interface for
@@ -17,7 +17,7 @@ PATCH_URI="
 	0.9.3-no-undefined.patch
 "
 
-PKG_NAMES="lib${NAME}_2 lib${NAME}-devel"
+PKG_NAMES="lib${NAME}4_2 lib${NAME}4-devel"
 libtelepathy_qt4_2_CONTENTS="usr/bin/cygtelepathy-qt4-2.dll usr/share/doc/"
 libtelepathy_qt4_devel_CONTENTS='--exclude=*arsight* usr/include/ usr/lib/'
 
