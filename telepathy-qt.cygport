@@ -1,7 +1,7 @@
-inherit qt4-cmake
+inherit qt5 qt4-cmake
 
 NAME="telepathy-qt"
-VERSION=0.9.3
+VERSION=0.9.6.1
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Qt Telepathy client library"
@@ -14,15 +14,65 @@ SRC_URI="http://telepathy.freedesktop.org/releases/telepathy-qt/telepathy-qt-${V
 SRC_DIR="telepathy-qt-${VERSION}"
 PATCH_URI="
 	0.9.3-install.patch
-	0.9.3-no-undefined.patch
+	0.9.6.1-as-needed.patch
+	0.9.6.1-dllexport.patch
 "
 
-PKG_NAMES="lib${NAME}4_2 lib${NAME}4-devel"
-libtelepathy_qt4_2_CONTENTS="usr/bin/cygtelepathy-qt4-2.dll usr/share/doc/"
-libtelepathy_qt4_devel_CONTENTS='--exclude=*arsight* usr/include/ usr/lib/'
+PKG_NAMES="lib${NAME}4_2 lib${NAME}4-devel lib${NAME}5_0 lib${NAME}5-devel"
+libtelepathy_qt4_2_CONTENTS="
+	usr/bin/cygtelepathy-qt4-2.dll
+	usr/share/doc/${NAME}4/
+"
+libtelepathy_qt4_devel_CONTENTS="
+	usr/include/telepathy-qt4/
+	usr/lib/cmake/TelepathyQt4/
+	usr/lib/cmake/TelepathyQt4Service/
+	usr/lib/libtelepathy-qt4-service.a
+	usr/lib/libtelepathy-qt4.dll.a
+	usr/lib/pkgconfig/TelepathyQt4.pc
+	usr/lib/pkgconfig/TelepathyQt4Service.pc
+"
+libtelepathy_qt5_0_CONTENTS="
+	usr/bin/cygtelepathy-qt5-0.dll
+	usr/share/doc/${NAME}5/"
+libtelepathy_qt5_devel_CONTENTS="
+	usr/include/telepathy-qt5/
+	usr/lib/cmake/TelepathyQt5/
+	usr/lib/cmake/TelepathyQt5Service/
+	usr/lib/libtelepathy-qt5-service.a
+	usr/lib/libtelepathy-qt5.dll.a
+	usr/lib/pkgconfig/TelepathyQt5.pc
+	usr/lib/pkgconfig/TelepathyQt5Service.pc
+"
 
 CYGCMAKE_ARGS="
-	-DCXX_FVISIBILITY_HIDDEN=NO
-	-DENABLE_FARSIGHT=NO
-	-DENABLE_FARSTREAM=NO
+	-DCXX_FVISIBILITY_HIDDEN=OFF
+	-DDISABLE_WERROR=ON
+	-DENABLE_FARSTREAM=OFF
+	-DENABLE_SERVICE_SUPPORT=ON
 "
+
+src_compile() {
+	mkdir -p ${B}/qt{4,5}
+
+	cd ${B}/qt4
+	qt4_cmake_compile -DDESIRED_QT_VERSION=4 -DQHELPGENERATOR_EXECUTABLE=${QT4_BINDIR}/qhelpgenerator
+
+	cd ${B}/qt5
+	cygcmake -DDESIRED_QT_VERSION=5 -DQHELPGENERATOR_EXECUTABLE=${QT5_BINDIR}/qhelpgenerator
+	cygmake
+}
+
+src_install() {
+	cd ${B}/qt4
+	cyginstall
+
+	cd ${B}/qt5
+	cyginstall
+
+	cd ${S}
+	docinto /${NAME}4
+	dodoc AUTHORS COPYING ChangeLog HACKING NEWS README
+	docinto /${NAME}5
+	dodoc AUTHORS COPYING ChangeLog HACKING NEWS README
+}

@@ -1,0 +1,72 @@
+--- origsrc/telepathy-qt-0.9.6.1/cmake/modules/TpQtMacros.cmake	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/cmake/modules/TpQtMacros.cmake	2015-09-06 20:34:49.856250400 -0500
+@@ -404,7 +404,7 @@ endfunction(tpqt_types_gen _TARGET_NAME
+ macro(tpqt_add_generic_unit_test _fancyName _name)
+     tpqt_generate_moc_i(${_name}.cpp ${CMAKE_CURRENT_BINARY_DIR}/_gen/${_name}.cpp.moc.hpp)
+     add_executable(test-${_name} ${_name}.cpp ${CMAKE_CURRENT_BINARY_DIR}/_gen/${_name}.cpp.moc.hpp)
+-    target_link_libraries(test-${_name} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTTEST_LIBRARY} telepathy-qt${QT_VERSION_MAJOR} tp-qt-tests ${TP_QT_EXECUTABLE_LINKER_FLAGS} ${ARGN})
++    target_link_libraries(test-${_name} ${ARGN} tp-qt-tests telepathy-qt${QT_VERSION_MAJOR} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTTEST_LIBRARY} ${TP_QT_EXECUTABLE_LINKER_FLAGS})
+     add_test(${_fancyName} ${SH} ${CMAKE_CURRENT_BINARY_DIR}/runGenericTest.sh ${CMAKE_CURRENT_BINARY_DIR}/test-${_name})
+     list(APPEND _telepathy_qt_test_cases test-${_name})
+ 
+@@ -415,7 +415,7 @@ endmacro(tpqt_add_generic_unit_test _fan
+ macro(tpqt_add_dbus_unit_test _fancyName _name)
+     tpqt_generate_moc_i(${_name}.cpp ${CMAKE_CURRENT_BINARY_DIR}/_gen/${_name}.cpp.moc.hpp)
+     add_executable(test-${_name} ${_name}.cpp ${CMAKE_CURRENT_BINARY_DIR}/_gen/${_name}.cpp.moc.hpp)
+-    target_link_libraries(test-${_name} ${QT_QTCORE_LIBRARY} ${QT_QTDBUS_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTTEST_LIBRARY} telepathy-qt${QT_VERSION_MAJOR} tp-qt-tests ${TP_QT_EXECUTABLE_LINKER_FLAGS} ${ARGN})
++    target_link_libraries(test-${_name} ${ARGN} tp-qt-tests telepathy-qt${QT_VERSION_MAJOR} ${QT_QTCORE_LIBRARY} ${QT_QTDBUS_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTTEST_LIBRARY} ${TP_QT_EXECUTABLE_LINKER_FLAGS})
+     set(with_session_bus ${CMAKE_CURRENT_BINARY_DIR}/runDbusTest.sh)
+     add_test(${_fancyName} ${SH} ${with_session_bus} ${CMAKE_CURRENT_BINARY_DIR}/test-${_name})
+     list(APPEND _telepathy_qt_test_cases test-${_name})
+--- origsrc/telepathy-qt-0.9.6.1/examples/cm/CMakeLists.txt	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/examples/cm/CMakeLists.txt	2015-09-04 17:12:32.275105900 -0500
+@@ -11,11 +11,11 @@ if(ENABLE_SERVICE_SUPPORT)
+ 
+     add_executable(cm ${cm_SRCS} ${cm_MOC_SRCS})
+     target_link_libraries(cm
++        telepathy-qt${QT_VERSION_MAJOR}-service
++        telepathy-qt${QT_VERSION_MAJOR}
+         ${QT_QTCORE_LIBRARY}
+         ${QT_QTDBUS_LIBRARY}
+         ${QT_QTNETWORK_LIBRARY}
+         ${QT_QTXML_LIBRARY}
+-        telepathy-qt${QT_VERSION_MAJOR}
+-        telepathy-qt${QT_VERSION_MAJOR}-service
+         ${TP_QT_EXECUTABLE_LINKER_FLAGS})
+ endif(ENABLE_SERVICE_SUPPORT)
+--- origsrc/telepathy-qt-0.9.6.1/tests/lib/glib/CMakeLists.txt	2015-09-04 17:20:47.734521200 -0500
++++ src/telepathy-qt-0.9.6.1/tests/lib/glib/CMakeLists.txt	2015-09-04 16:44:53.146423300 -0500
+@@ -57,17 +57,17 @@ if(ENABLE_TP_GLIB_TESTS)
+     endif(ENABLE_TP_GLIB_GIO_TESTS)
+     add_library(tp-glib-tests SHARED ${tp_glib_tests_SRCS})
+     target_link_libraries(tp-glib-tests
+-        ${TELEPATHY_GLIB_LIBRARIES}
+-        ${GLIB2_LIBRARIES}
+-        ${GOBJECT_LIBRARIES}
+-        ${GIO_LIBRARIES}
+-        ${DBUS_GLIB_LIBRARIES}
+-        ${DBUS_LIBRARIES}
+         example-cm-call
+         example-cm-callable
+         example-cm-contactlist
+         example-cm-echo
+         example-cm-echo2
+-        tp-glib-tests-future-extensions)
++        tp-glib-tests-future-extensions
++        ${TELEPATHY_GLIB_LIBRARIES}
++        ${GLIB2_LIBRARIES}
++        ${GOBJECT_LIBRARIES}
++        ${GIO_LIBRARIES}
++        ${DBUS_GLIB_LIBRARIES}
++        ${DBUS_LIBRARIES})
+ 
+ endif(ENABLE_TP_GLIB_TESTS)
+--- origsrc/telepathy-qt-0.9.6.1/tests/lib/glib-helpers/CMakeLists.txt	2015-09-04 17:20:47.738021700 -0500
++++ src/telepathy-qt-0.9.6.1/tests/lib/glib-helpers/CMakeLists.txt	2015-09-04 16:44:53.149923700 -0500
+@@ -18,5 +18,6 @@ if(ENABLE_TP_GLIB_TESTS)
+         ${DBUS_GLIB_LIBRARIES}
+         ${QT_QTCORE_LIBRARY}
+         ${QT_QTDBUS_LIBRARY}
++        ${QT_QTTEST_LIBRARY}
+         telepathy-qt${QT_VERSION_MAJOR})
+ endif(ENABLE_TP_GLIB_TESTS)

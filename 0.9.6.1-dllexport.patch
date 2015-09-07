@@ -1,0 +1,623 @@
+The service library is static, so its classes should not be dllexport.
+Nested classes apparently need to be explicitly marked, even when the
+parent class is so already.
+
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/CMakeLists.txt	2015-09-04 16:44:52.977901900 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/CMakeLists.txt	2015-09-06 18:47:59.101844900 -0500
+@@ -4,9 +4,6 @@ file(MAKE_DIRECTORY "${CMAKE_CURRENT_BIN
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${VISIBILITY_HIDDEN_FLAGS} ${COMPILER_COVERAGE_FLAGS} ${DEPRECATED_DECLARATIONS_FLAGS}")
+ set(LD_FLAGS "${LD_FLAGS} ${VISIBILITY_HIDDEN_FLAGS} ${COMPILER_COVERAGE_FLAGS} ${DEPRECATED_DECLARATIONS_FLAGS}")
+ 
+-# We are building Telepathy-Qt
+-add_definitions(-DBUILDING_TP_QT)
+-
+ configure_file(global.h.in ${CMAKE_CURRENT_BINARY_DIR}/global.h)
+ 
+ # Sources for Tp-Qt
+@@ -792,6 +789,7 @@ endif (ENABLE_COMPILER_COVERAGE)
+ 
+ # Set the correct version number
+ set_target_properties(telepathy-qt${QT_VERSION_MAJOR} PROPERTIES
++                                    COMPILE_DEFINITIONS BUILDING_TP_QT
+                                     SOVERSION ${TP_QT_ABI_VERSION}
+                                     VERSION ${TP_QT_LIBRARY_VERSION})
+ 
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/abstract-adaptor.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/abstract-adaptor.h	2015-09-06 19:17:36.087354400 -0500
+@@ -37,7 +37,7 @@ class QDBusConnection;
+ namespace Tp
+ {
+ 
+-class TP_QT_EXPORT AbstractAdaptor : public QDBusAbstractAdaptor
++class AbstractAdaptor : public QDBusAbstractAdaptor
+ {
+     Q_OBJECT
+ 
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/abstract-client.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/abstract-client.h	2015-09-06 21:18:49.493105100 -0500
+@@ -68,7 +68,7 @@ class TP_QT_EXPORT AbstractClientObserve
+     Q_DISABLE_COPY(AbstractClientObserver)
+ 
+ public:
+-    class ObserverInfo
++    class TP_QT_EXPORT ObserverInfo
+     {
+     public:
+         ObserverInfo(const QVariantMap &info = QVariantMap());
+@@ -142,7 +142,7 @@ class TP_QT_EXPORT AbstractClientHandler
+     Q_DISABLE_COPY(AbstractClientHandler)
+ 
+ public:
+-    class Capabilities
++    class TP_QT_EXPORT Capabilities
+     {
+     public:
+         Capabilities(const QStringList &tokens = QStringList());
+@@ -270,7 +270,7 @@ public:
+         QSharedDataPointer<Private> mPriv;
+     };
+ 
+-    class HandlerInfo
++    class TP_QT_EXPORT HandlerInfo
+     {
+     public:
+         HandlerInfo(const QVariantMap &info = QVariantMap());
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/base-call.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/base-call.h	2015-09-06 19:20:07.516015700 -0500
+@@ -42,7 +42,7 @@ class QString;
+ namespace Tp
+ {
+ 
+-class TP_QT_EXPORT AbstractCallContentInterface : public AbstractDBusServiceInterface
++class AbstractCallContentInterface : public AbstractDBusServiceInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(AbstractCallContentInterface)
+@@ -59,7 +59,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseCallContent : public DBusService
++class BaseCallContent : public DBusService
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseCallContent)
+@@ -105,7 +105,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseCallMuteInterface : public AbstractChannelInterface
++class BaseCallMuteInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseCallMuteInterface)
+@@ -141,7 +141,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseCallContentDTMFInterface : public AbstractCallContentInterface
++class BaseCallContentDTMFInterface : public AbstractCallContentInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseCallContentDTMFInterface)
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/base-channel.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/base-channel.h	2015-09-06 19:20:23.876951400 -0500
+@@ -39,7 +39,7 @@ class QString;
+ namespace Tp
+ {
+ 
+-class TP_QT_EXPORT BaseChannel : public DBusService
++class BaseChannel : public DBusService
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannel)
+@@ -92,7 +92,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT AbstractChannelInterface : public AbstractDBusServiceInterface
++class AbstractChannelInterface : public AbstractDBusServiceInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(AbstractChannelInterface)
+@@ -110,7 +110,7 @@ private:
+ 
+ };
+ 
+-class TP_QT_EXPORT BaseChannelTextType : public AbstractChannelInterface
++class BaseChannelTextType : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelTextType)
+@@ -160,7 +160,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelMessagesInterface : public AbstractChannelInterface
++class BaseChannelMessagesInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelMessagesInterface)
+@@ -216,7 +216,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelRoomListType : public AbstractChannelInterface
++class BaseChannelRoomListType : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelRoomListType)
+@@ -265,7 +265,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelServerAuthenticationType : public AbstractChannelInterface
++class BaseChannelServerAuthenticationType : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelServerAuthenticationType)
+@@ -294,7 +294,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelCaptchaAuthenticationInterface : public AbstractChannelInterface
++class BaseChannelCaptchaAuthenticationInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelCaptchaAuthenticationInterface)
+@@ -339,7 +339,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelSASLAuthenticationInterface : public AbstractChannelInterface
++class BaseChannelSASLAuthenticationInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelSASLAuthenticationInterface)
+@@ -442,7 +442,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelSecurableInterface : public AbstractChannelInterface
++class BaseChannelSecurableInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelSecurableInterface)
+@@ -482,7 +482,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelChatStateInterface : public AbstractChannelInterface
++class BaseChannelChatStateInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelChatStateInterface)
+@@ -525,7 +525,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelGroupInterface : public AbstractChannelInterface
++class BaseChannelGroupInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelGroupInterface)
+@@ -565,7 +565,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelRoomInterface : public AbstractChannelInterface
++class BaseChannelRoomInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelRoomInterface)
+@@ -625,7 +625,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelRoomConfigInterface : public AbstractChannelInterface
++class BaseChannelRoomConfigInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelRoomConfigInterface)
+@@ -705,7 +705,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelCallType : public AbstractChannelInterface
++class BaseChannelCallType : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelCallType)
+@@ -813,7 +813,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelHoldInterface : public AbstractChannelInterface
++class BaseChannelHoldInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelHoldInterface)
+@@ -850,7 +850,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelMergeableConferenceInterface : public AbstractChannelInterface
++class BaseChannelMergeableConferenceInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelMergeableConferenceInterface)
+@@ -883,7 +883,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelSplittableInterface : public AbstractChannelInterface
++class BaseChannelSplittableInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelSplittableInterface)
+@@ -916,7 +916,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelConferenceInterface : public AbstractChannelInterface
++class BaseChannelConferenceInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelConferenceInterface)
+@@ -962,7 +962,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseChannelSMSInterface : public AbstractChannelInterface
++class BaseChannelSMSInterface : public AbstractChannelInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseChannelSMSInterface)
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/base-connection-manager.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/base-connection-manager.h	2015-09-06 19:20:31.867408500 -0500
+@@ -38,7 +38,7 @@ class QString;
+ namespace Tp
+ {
+ 
+-class TP_QT_EXPORT BaseConnectionManager : public DBusService
++class BaseConnectionManager : public DBusService
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseConnectionManager)
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/base-connection.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/base-connection.h	2015-09-06 19:20:41.915983200 -0500
+@@ -41,7 +41,7 @@ class QString;
+ namespace Tp
+ {
+ 
+-class TP_QT_EXPORT BaseConnection : public DBusService
++class BaseConnection : public DBusService
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseConnection)
+@@ -134,7 +134,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT AbstractConnectionInterface : public AbstractDBusServiceInterface
++class AbstractConnectionInterface : public AbstractDBusServiceInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(AbstractConnectionInterface)
+@@ -151,7 +151,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseConnectionRequestsInterface : public AbstractConnectionInterface
++class BaseConnectionRequestsInterface : public AbstractConnectionInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseConnectionRequestsInterface)
+@@ -194,7 +194,7 @@ private:
+ };
+ 
+ 
+-class TP_QT_EXPORT BaseConnectionContactsInterface : public AbstractConnectionInterface
++class BaseConnectionContactsInterface : public AbstractConnectionInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseConnectionContactsInterface)
+@@ -233,7 +233,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseConnectionSimplePresenceInterface : public AbstractConnectionInterface
++class BaseConnectionSimplePresenceInterface : public AbstractConnectionInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseConnectionSimplePresenceInterface)
+@@ -280,7 +280,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseConnectionContactListInterface : public AbstractConnectionInterface
++class BaseConnectionContactListInterface : public AbstractConnectionInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseConnectionContactListInterface)
+@@ -359,7 +359,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseConnectionContactInfoInterface : public AbstractConnectionInterface
++class BaseConnectionContactInfoInterface : public AbstractConnectionInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseConnectionContactInfoInterface)
+@@ -417,7 +417,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseConnectionAddressingInterface : public AbstractConnectionInterface
++class BaseConnectionAddressingInterface : public AbstractConnectionInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseConnectionAddressingInterface)
+@@ -459,7 +459,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseConnectionAliasingInterface : public AbstractConnectionInterface
++class BaseConnectionAliasingInterface : public AbstractConnectionInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseConnectionAliasingInterface)
+@@ -511,7 +511,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseConnectionAvatarsInterface : public AbstractConnectionInterface
++class BaseConnectionAvatarsInterface : public AbstractConnectionInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseConnectionAvatarsInterface)
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/base-protocol.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/base-protocol.h	2015-09-06 19:20:50.782490400 -0500
+@@ -44,7 +44,7 @@ class QStringList;
+ namespace Tp
+ {
+ 
+-class TP_QT_EXPORT BaseProtocol : public DBusService
++class BaseProtocol : public DBusService
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseProtocol)
+@@ -130,7 +130,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT AbstractProtocolInterface : public AbstractDBusServiceInterface
++class AbstractProtocolInterface : public AbstractDBusServiceInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(AbstractProtocolInterface)
+@@ -147,7 +147,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseProtocolAddressingInterface : public AbstractProtocolInterface
++class BaseProtocolAddressingInterface : public AbstractProtocolInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseProtocolAddressingInterface)
+@@ -195,7 +195,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseProtocolAvatarsInterface : public AbstractProtocolInterface
++class BaseProtocolAvatarsInterface : public AbstractProtocolInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseProtocolAvatarsInterface)
+@@ -232,7 +232,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT BaseProtocolPresenceInterface : public AbstractProtocolInterface
++class BaseProtocolPresenceInterface : public AbstractProtocolInterface
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(BaseProtocolPresenceInterface)
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/callbacks.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/callbacks.h	2015-09-06 20:25:59.585920700 -0500
+@@ -62,7 +62,7 @@ struct BaseFunctorCaller : public Abstra
+     Functor functor;
+ };
+ 
+-struct TP_QT_EXPORT BaseCallback
++struct BaseCallback
+ {
+     BaseCallback() : caller(0) {}
+     /* takes ownership of caller */
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/channel.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/channel.h	2015-09-06 21:22:05.519317100 -0500
+@@ -102,7 +102,7 @@ public:
+     Contacts groupLocalPendingContacts(bool includeSelfContact = true) const;
+     Contacts groupRemotePendingContacts(bool includeSelfContact = true) const;
+ 
+-    class GroupMemberChangeDetails
++    class TP_QT_EXPORT GroupMemberChangeDetails
+     {
+     public:
+         GroupMemberChangeDetails();
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/connection.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/connection.h	2015-09-06 21:11:19.273354000 -0500
+@@ -94,7 +94,7 @@ public:
+     ConnectionStatus status() const;
+     ConnectionStatusReason statusReason() const;
+ 
+-    class ErrorDetails
++    class TP_QT_EXPORT ErrorDetails
+     {
+         public:
+             ErrorDetails();
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/contact-search-channel.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/contact-search-channel.h	2015-09-06 21:30:16.266386300 -0500
+@@ -42,7 +42,7 @@ class TP_QT_EXPORT ContactSearchChannel
+ public:
+     static const Feature FeatureCore;
+ 
+-    class SearchStateChangeDetails
++    class TP_QT_EXPORT SearchStateChangeDetails
+     {
+     public:
+         SearchStateChangeDetails();
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/contact.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/contact.h	2015-09-06 21:30:32.051289100 -0500
+@@ -70,7 +70,7 @@ public:
+          PresenceStateYes
+     };
+ 
+-    class InfoFields
++    class TP_QT_EXPORT InfoFields
+     {
+     public:
+         InfoFields();
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/dbus-error.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/dbus-error.h	2015-09-06 19:18:17.279710500 -0500
+@@ -32,7 +32,7 @@
+ namespace Tp
+ {
+ 
+-class TP_QT_EXPORT DBusError
++class DBusError
+ {
+     Q_DISABLE_COPY(DBusError)
+ 
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/dbus-object.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/dbus-object.h	2015-09-06 19:18:25.632188200 -0500
+@@ -36,7 +36,7 @@ class QDBusConnection;
+ namespace Tp
+ {
+ 
+-class TP_QT_EXPORT DBusObject : public QObject
++class DBusObject : public QObject
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(DBusObject)
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/dbus-service.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/dbus-service.h	2015-09-06 19:18:48.593501500 -0500
+@@ -43,7 +43,7 @@ namespace Tp
+ 
+ class DBusObject;
+ 
+-class TP_QT_EXPORT DBusService : public Object
++class DBusService : public Object
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(DBusService)
+@@ -70,7 +70,7 @@ private:
+     Private *mPriv;
+ };
+ 
+-class TP_QT_EXPORT AbstractDBusServiceInterface : public Object
++class AbstractDBusServiceInterface : public Object
+ {
+     Q_OBJECT
+     Q_DISABLE_COPY(AbstractDBusServiceInterface)
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/message.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/message.h	2015-09-06 21:41:42.536638700 -0500
+@@ -97,7 +97,7 @@ private:
+ class TP_QT_EXPORT ReceivedMessage : public Message
+ {
+ public:
+-    class DeliveryDetails
++    class TP_QT_EXPORT DeliveryDetails
+     {
+     public:
+         DeliveryDetails();
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/profile.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/profile.h	2015-09-06 20:54:44.791596800 -0500
+@@ -63,7 +63,7 @@ public:
+     QString cmName() const;
+     QString protocolName() const;
+ 
+-    class Parameter
++    class TP_QT_EXPORT Parameter
+     {
+     public:
+         Parameter();
+@@ -106,7 +106,7 @@ public:
+     bool hasParameter(const QString &name) const;
+     Parameter parameter(const QString &name) const;
+ 
+-    class Presence
++    class TP_QT_EXPORT Presence
+     {
+     public:
+         Presence();
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/stream-tube-client.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/stream-tube-client.h	2015-09-06 21:38:11.139547400 -0500
+@@ -46,7 +46,7 @@ class TP_QT_EXPORT StreamTubeClient : pu
+ 
+ public:
+ 
+-    class TcpSourceAddressGenerator
++    class TP_QT_EXPORT TcpSourceAddressGenerator
+     {
+     public:
+         virtual QPair<QHostAddress, quint16>
+@@ -56,7 +56,7 @@ public:
+         virtual ~TcpSourceAddressGenerator() {}
+     };
+ 
+-    class Tube : public QPair<AccountPtr, IncomingStreamTubeChannelPtr>
++    class TP_QT_EXPORT Tube : public QPair<AccountPtr, IncomingStreamTubeChannelPtr>
+     {
+     public:
+         Tube();
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/stream-tube-server.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/stream-tube-server.h	2015-09-06 21:38:28.121518800 -0500
+@@ -48,7 +48,7 @@ class TP_QT_EXPORT StreamTubeServer : pu
+ 
+ public:
+ 
+-    class ParametersGenerator
++    class TP_QT_EXPORT ParametersGenerator
+     {
+     public:
+         virtual QVariantMap
+@@ -59,7 +59,7 @@ public:
+         virtual ~ParametersGenerator() {}
+     };
+ 
+-    class RemoteContact : public QPair<AccountPtr, ContactPtr>
++    class TP_QT_EXPORT RemoteContact : public QPair<AccountPtr, ContactPtr>
+     {
+     public:
+         RemoteContact();
+@@ -87,7 +87,7 @@ public:
+         QSharedDataPointer<Private> mPriv;
+     };
+ 
+-    class Tube : public QPair<AccountPtr, OutgoingStreamTubeChannelPtr>
++    class TP_QT_EXPORT Tube : public QPair<AccountPtr, OutgoingStreamTubeChannelPtr>
+     {
+     public:
+         Tube();
+--- origsrc/telepathy-qt-0.9.6.1/TelepathyQt/test-backdoors.h	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/TelepathyQt/test-backdoors.h	2015-09-06 20:52:58.469515500 -0500
+@@ -42,7 +42,7 @@ class DBusProxy;
+ 
+ // Exported so the tests can use it even if they link dynamically
+ // The header is not installed though, so this should be considered private API
+-struct TP_QT_EXPORT TestBackdoors
++struct TestBackdoors
+ {
+     static void invalidateProxy(DBusProxy *proxy, const QString &reason, const QString &message);
+ 
+--- origsrc/telepathy-qt-0.9.6.1/cmake/modules/TpQtMacros.cmake	2015-05-24 14:33:18.000000000 -0500
++++ src/telepathy-qt-0.9.6.1/cmake/modules/TpQtMacros.cmake	2015-09-06 20:34:49.856250400 -0500
+@@ -286,7 +286,6 @@ function(tpqt_service_generator spec gro
+             --mocinclude=TelepathyQt/_gen/svc-${spec}.moc.hpp
+             --specxml=${CMAKE_CURRENT_BINARY_DIR}/_gen/stable-spec.xml
+             --ifacexml=${CMAKE_CURRENT_BINARY_DIR}/_gen/spec-svc-${spec}.xml
+-            --visibility=TP_QT_EXPORT
+             ${service_generator_args})
+     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_gen/svc-${spec}.h ${CMAKE_CURRENT_BINARY_DIR}/_gen/svc-${spec}.cpp
+         COMMAND ${PYTHON_EXECUTABLE}
